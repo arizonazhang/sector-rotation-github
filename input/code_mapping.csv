@@ -1,0 +1,103 @@
+code,name
+.CSIH00929,Materials
+.CSIH00934,Financials
+.CSIH00933,Health Care
+.CSIH00930,Industrials
+.CSIH00928,Energy
+.CSIH00935,Information Technology
+.CSIH00936,Telecommunication
+.CSIH00937,Utilities
+.CSIH00931,Consumer Discretionary
+.CSIH00932,Consumer Staples
+.DJUSBMT,Materials
+.DJUSNCT,Consumer Goods
+.DJUSCYT,Consumer Services
+.DJUSFNT,Financials
+.DJUSHCT,Health Care
+.DJUSINT,Industrials
+.DJUSENT,Energy
+.DJUSTCT,Information Technology
+.DJUSTLT,Telecommunication
+.DJUSUTT,Utilities
+.HSCIM,Materials
+.HSCIF,Financials
+.HSCIH,Health Care
+.HSCIIG,Industrials
+.HSCIE,Energy
+.HSCIIT,Information Technology
+.HSCIT,Telecommunication
+.HSCIU,Utilities
+.HSCICD,Consumer Discretionary
+.HSCICS,Consumer Staples
+.HSCIPC,Properties & Construction
+exmkt,Excess Market
+size,Size
+bm,Value-B2M
+ep,Value-E2P
+roe,Profitability
+ag,Investment
+m12,Momentum
+m1,Reversal
+beta,Beta
+idvc,Volume
+dtvm,Volatility
+rf,Risk-free
+.dMIWD00000G,MSCI ACWI
+.dMIEF00000G,MSCI EM
+.dMIEA00000G,MSCI DM
+JPY=,JPYUSD
+US10YT=RR,TBill10Y
+.DXY,USD
+.TRXFLDHDTA1,Academic & Educational Services
+.TRXFLDHDTE1,Energy - Fossil Fuels
+.TRXFLDHDTE2,Renewable Energy
+.TRXFLDHDTF1,Banking & Investment Services
+.TRXFLDHDTF4,Real Estate
+.TRXFLDHDTH1,Healthcare Services & Equipment
+.TRXFLDHDTH2,Pharmaceuticals & Medical Research
+.TRXFLDHDTI1,Industrial Goods
+.TRXFLDHDTI2,Industrial & Commercial Services
+.TRXFLDHDTI4,Transportation
+.TRXFLDHDTM1,Chemicals
+.TRXFLDHDTM2,Mineral Resources
+.TRXFLDHDTM3,Applied Resources
+.TRXFLDHDTN1,Food & Beverages
+.TRXFLDHDTN2,Personal & Household Products & Services
+.TRXFLDHDTT1,Technology Equipment
+.TRXFLDHDTT2,Software & IT Services
+.TRXFLDHDTU1,Utilities
+.TRXFLDHDTY1,Automobiles & Auto Parts
+.TRXFLDHDTY2,Cyclical Consumer Products
+.TRXFLDHDTY3,Cyclical Consumer Services
+.TRXFLDHDTY4,Retailers
+.TR15GSPE,Energy
+.TR15GSPM,Materials
+.TR15GSPI,Industrials
+.TR15GSPD,Consumer Discretionary
+.TR15GSPS,Consumer Staples
+.TR15GSPA,Health Care
+.TR15GSPF,Financials
+.TR15GSPT,Information Technology
+.TR15GSPL,Communication Services
+.TR15GSPU,Utilities
+.TR15GSPREC,Real Estate
+.TR15GSPIC,Capital Goods
+.TR15GSPCS,Commercial & Professional Services
+.TR15GSPTRN,Transportation
+.TR15GSPAU,Automobiles & Components
+.TR15GSPLP,Consumer Durables & Apparel
+.TR15GSPHR,Consumer Services
+.TR15GSPMS,Retailing
+.TR15GSPFDGR,Food & Staples Retailing
+.TR15GSPFBT,"Food, Beverage & Tobacco"
+.TR15GSPHHPE,Household & Personal Products
+.TR15GSPHC,Health Care Equipment & Services
+.TR15GSPPHB,"Pharmaceuticals, Biotechnology & Life Sciences"
+.TR15GSPBK,Banks
+.TR15GSPDF,Diversified Financials
+.TR15GSPINSC,Insurance
+.TR15GSPIS,Software & Services
+.TR15GSPTEHW,Technology Hardware & Equipment
+.TR15GSPSEQP,Semiconductors & Semiconductor Equipment
+.TR15GSPTS,Telecommunication Services
+.TR15GSPME,Media & Entertainment
