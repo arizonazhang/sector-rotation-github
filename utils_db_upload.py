@@ -316,17 +316,33 @@ def save_local(data, file_name):
         print("The destination file is open. Please close the file.")
 
 
+
+
 def new_code_name(df):
     """
     upload new code-name mapping pairs to database and local file
     :param df: two columns, with codes on the left and names on the right
     :return:
     """
+
+    def mysql_replace_into(table, conn, keys, data_iter):
+        from sqlalchemy.dialects.mysql import insert
+        from sqlalchemy.ext.compiler import compiles
+        from sqlalchemy.sql.expression import Insert
+
+        @compiles(Insert)
+        def replace_string(insert, compiler, **kw):
+            s = compiler.visit_insert(insert, **kw)
+            s = s.replace("INSERT INTO", "REPLACE INTO")
+            return s
+        data = [dict(zip(keys, row)) for row in data_iter]
+        conn.execute(table.table.insert(replace_string=""), data)
+
     df.columns = ['code', 'name']
 
     # save to database
     engine = create_engine("mysql+mysqlconnector://infoport:HKaift-123@192.168.2.81/AlternativeData")
-    df.to_sql("SecRotMapping", engine, if_exists="append", index=False)
+    df.to_sql("SecRotMapping", engine, if_exists="append", index=False, method=mysql_replace_into)
 
     # save to local file
     allcodes = pd.read_csv(r'.\input\code_mapping.csv')
@@ -349,9 +365,11 @@ if __name__ == '__main__':
     # data = pd.concat([sectors, factors, factors_ls, exogs])
     # upload_return(data)
 
-    con = api_connector()
-    data = get_sector_single('us', 'industry_group', '2021-05-01', '2022-06-17', con)
-    upload_return(data)
-    print(data.head(5))
-    print(data.tail(5))
-    con.print_counter()
+    # con = api_connector()
+    # data = get_sector_single('us', 'industry_group', '2021-05-01', '2022-06-17', con)
+    # upload_return(data)
+    # print(data.head(5))
+    # print(data.tail(5))
+    # con.print_counter()
+    data = pd.DataFrame({'code':['mycode', 'mycode1'], 'name':['myname333', 'myname1']})
+    new_code_name(data)
