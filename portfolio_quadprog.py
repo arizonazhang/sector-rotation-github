@@ -23,7 +23,6 @@ def cal_weights(cal_mean_var, gamma_op, model_log=False):
         row_index = df_sectors.index[t + window].strftime("%Y-%m-%d")
         if reb < len(weeks) and df_sectors.index[t + window - 1] <= weeks[reb] and df_sectors.index[t + window] > weeks[
             reb]:
-
             # select the calculation time horizon (last 260 weeks including holidays)
             idx_range = (df_sectors.index <= weeks[reb]) & (df_sectors.index >= weeks[reb - window + 1])
             df_window = df_sectors[idx_range].dropna(how='any', axis=1)

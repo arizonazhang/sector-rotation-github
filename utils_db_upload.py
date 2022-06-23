@@ -169,8 +169,6 @@ def get_factor_single_ls(country, code, side):
         data.index = pd.Series(list(map(lambda x: x + np.timedelta64(4 - x.weekday(), 'D'), data.index)))
         data = (data + 1).groupby(data.index).prod() - 1
 
-
-
     check_complete(data)
 
     # stack data and add other columns
@@ -269,13 +267,13 @@ def get_sector(level, start_dt, end_dt, con, save_file=False):
     return sectors
 
 
-def get_exog(start_dt, end_dt, con):
+def get_exog(start_dt, end_dt, con, save_file=False):
     """
     get exogenous data from api
     """
     # data = pd.read_csv(r'.\input\factor\exogs_weekly.csv', index_col=0)
     tickers = ric_dict['exogs']
-    data = con.get_api(tickers, start_dt, end_dt, con)
+    data = con.get_api(tickers, start_dt, end_dt)
 
     cols_pct = [col for col in data.columns if col not in ['US10YT=RR']]
     if 'US10YT=RR' in data.columns:
@@ -291,6 +289,9 @@ def get_exog(start_dt, end_dt, con):
     df['markets'] = 'common_exogs'
     df['side'] = 'NA'
     df['date'] = pd.to_datetime(df['date'])
+
+    if save_file:
+        save_local(df, r'.\input\factor\exogs_weekly.csv')
     return df
 
 
@@ -302,11 +303,13 @@ def save_local(data, file_name):
     :return:
     """
     data = data.pivot(index='date', columns='code', values='value')
+    data = data.astype(float).round(6)
     if os.path.exists(file_name):
         old_data = pd.read_csv(file_name, index_col=0)
         old_data.index = pd.to_datetime(old_data.index, infer_datetime_format=True)
+        old_data = old_data.astype(float).round(6)
         data = pd.concat([old_data, data])
-        data = data.drop_duplicates().dropna().sort_index()
+        data = data.drop_duplicates().sort_index()
 
     try:
         print(data.tail(10))
@@ -361,7 +364,7 @@ if __name__ == '__main__':
     # upload_return(data)
 
     # # ---- update sector return, exogenous variable (need to make sure refinitiv account if logged in)
-    # con = api_connector()
+    con = api_connector()
     # sectors = get_sector(level='sector', start_dt=start, end_dt=end, con=con)
     # industry_groups = get_sector(level='industry_group', start_dt=start, end_dt=end, con=con)
     # exogs = get_exog(start, end, con)
@@ -370,6 +373,7 @@ if __name__ == '__main__':
     # con.print_counter()
     #
     # ----- update code_mapping table
-    data = pd.read_csv(r'.\input\code_mapping.csv')
+    # data = pd.read_csv(r'.\input\code_mapping.csv')
     # data = pd.DataFrame({'code':['exmkt', 'mycode1'], 'name':['Excess market', 'myname1']})
-    new_code_name(data)
+    # new_code_name(data)
+    factors = get_factor_single('cn', 'cn800')
