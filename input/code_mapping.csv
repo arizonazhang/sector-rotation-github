@@ -1,53 +1,70 @@
 code,name
-.CSIH00929,Materials
-.CSIH00934,Financials
-.CSIH00933,Health Care
-.CSIH00930,Industrials
 .CSIH00928,Energy
+.CSIH00929,Materials
+.CSIH00930,Industrials
+.CSIH00931,Consumer Discretionary
+.CSIH00932,Consumer Staples
+.CSIH00933,Health Care
+.CSIH00934,Financials
 .CSIH00935,Information Technology
 .CSIH00936,Telecommunication
 .CSIH00937,Utilities
-.CSIH00931,Consumer Discretionary
-.CSIH00932,Consumer Staples
 .DJUSBMT,Materials
-.DJUSNCT,Consumer Goods
 .DJUSCYT,Consumer Services
+.DJUSENT,Energy
 .DJUSFNT,Financials
 .DJUSHCT,Health Care
 .DJUSINT,Industrials
-.DJUSENT,Energy
+.DJUSNCT,Consumer Goods
 .DJUSTCT,Information Technology
 .DJUSTLT,Telecommunication
 .DJUSUTT,Utilities
-.HSCIM,Materials
+.dMIEA00000G,MSCI DM
+.dMIEF00000G,MSCI EM
+.dMIWD00000G,MSCI ACWI
+.DXY,USD
+.HSCICD,Consumer Discretionary
+.HSCICS,Consumer Staples
+.HSCIE,Energy
 .HSCIF,Financials
 .HSCIH,Health Care
 .HSCIIG,Industrials
-.HSCIE,Energy
 .HSCIIT,Information Technology
+.HSCIM,Materials
+.HSCIPC,Properties & Construction
 .HSCIT,Telecommunication
 .HSCIU,Utilities
-.HSCICD,Consumer Discretionary
-.HSCICS,Consumer Staples
-.HSCIPC,Properties & Construction
-exmkt,Excess Market
-size,Size
-bm,Value-B2M
-ep,Value-E2P
-roe,Profitability
-ag,Investment
-m12,Momentum
-m1,Reversal
-beta,Beta
-idvc,Volume
-dtvm,Volatility
-rf,Risk-free
-.dMIWD00000G,MSCI ACWI
-.dMIEF00000G,MSCI EM
-.dMIEA00000G,MSCI DM
-JPY=,JPYUSD
-US10YT=RR,TBill10Y
-.DXY,USD
+.TR15GSPA,Health Care
+.TR15GSPAU,Automobiles & Components
+.TR15GSPBK,Banks
+.TR15GSPCS,Commercial & Professional Services
+.TR15GSPD,Consumer Discretionary
+.TR15GSPDF,Diversified Financials
+.TR15GSPE,Energy
+.TR15GSPF,Financials
+.TR15GSPFBT,"Food, Beverage & Tobacco"
+.TR15GSPFDGR,Food & Staples Retailing
+.TR15GSPHC,Health Care Equipment & Services
+.TR15GSPHHPE,Household & Personal Products
+.TR15GSPHR,Consumer Services
+.TR15GSPI,Industrials
+.TR15GSPIC,Capital Goods
+.TR15GSPINSC,Insurance
+.TR15GSPIS,Software & Services
+.TR15GSPL,Communication Services
+.TR15GSPLP,Consumer Durables & Apparel
+.TR15GSPM,Materials
+.TR15GSPME,Media & Entertainment
+.TR15GSPMS,Retailing
+.TR15GSPPHB,"Pharmaceuticals, Biotechnology & Life Sciences"
+.TR15GSPREC,Real Estate
+.TR15GSPS,Consumer Staples
+.TR15GSPSEQP,Semiconductors & Semiconductor Equipment
+.TR15GSPT,Information Technology
+.TR15GSPTEHW,Technology Hardware & Equipment
+.TR15GSPTRN,Transportation
+.TR15GSPTS,Telecommunication Services
+.TR15GSPU,Utilities
 .TRXFLDHDTA1,Academic & Educational Services
 .TRXFLDHDTE1,Energy - Fossil Fuels
 .TRXFLDHDTE2,Renewable Energy
@@ -70,37 +87,71 @@ US10YT=RR,TBill10Y
 .TRXFLDHDTY2,Cyclical Consumer Products
 .TRXFLDHDTY3,Cyclical Consumer Services
 .TRXFLDHDTY4,Retailers
-.TR15GSPE,Energy
-.TR15GSPM,Materials
-.TR15GSPI,Industrials
-.TR15GSPD,Consumer Discretionary
-.TR15GSPS,Consumer Staples
-.TR15GSPA,Health Care
-.TR15GSPF,Financials
-.TR15GSPT,Information Technology
-.TR15GSPL,Communication Services
-.TR15GSPU,Utilities
-.TR15GSPREC,Real Estate
-.TR15GSPIC,Capital Goods
-.TR15GSPCS,Commercial & Professional Services
-.TR15GSPTRN,Transportation
-.TR15GSPAU,Automobiles & Components
-.TR15GSPLP,Consumer Durables & Apparel
-.TR15GSPHR,Consumer Services
-.TR15GSPMS,Retailing
-.TR15GSPFDGR,Food & Staples Retailing
-.TR15GSPFBT,"Food, Beverage & Tobacco"
-.TR15GSPHHPE,Household & Personal Products
-.TR15GSPHC,Health Care Equipment & Services
-.TR15GSPPHB,"Pharmaceuticals, Biotechnology & Life Sciences"
-.TR15GSPBK,Banks
-.TR15GSPDF,Diversified Financials
-.TR15GSPINSC,Insurance
-.TR15GSPIS,Software & Services
-.TR15GSPTEHW,Technology Hardware & Equipment
-.TR15GSPSEQP,Semiconductors & Semiconductor Equipment
-.TR15GSPTS,Telecommunication Services
-.TR15GSPME,Media & Entertainment
-mycode,myname
+A,"Agriculture, forestry, animal husbandry and fishery"
+ag,Investment
+B,Mining
+beta,Beta
+bm,Value-B2M
+C,Manufacturing
+D,"Electric power, heat, gas and water production and supply"
+dtvm,Volatility
+E,Construction
+ep,Value-E2P
+exmkt,Excess market
+F,Wholesale and retail
+fama_1,Food Products
+fama_10,Textiles
+fama_11,Construction and Construction Materials
+fama_12,Steel Works Etc
+fama_13,Fabricated Products and Machinery
+fama_14,Electrical Equipment
+fama_15,Automobiles and Trucks
+fama_16,"Aircraft, ships, and railroad equipment"
+fama_17,"Precious Metals, Non-Metallic, and Industrial Metal Mining"
+fama_18,Coal
+fama_19,Petroleum and Natural Gas
+fama_2,Beer & Liquor
+fama_20,Utilities
+fama_21,Communication
+fama_22,Personal and Business Services
+fama_23,Business Equipment
+fama_24,Business Supplies and Shipping Containers
+fama_25,Transportation
+fama_26,Wholesale
+fama_27,Retail
+fama_28,"Restaurants, Hotels, Motels"
+fama_29,"Banking, Insurance, Real Estate, Trading"
+fama_3,Tobacco Products
+fama_30,Everything Else
+fama_4,Recreation
+fama_5,Printing and Publishing
+fama_6,Consumer Goods
+fama_7,Apparel
+fama_8,"Healthcare, Medical Equipment, Pharmaceutical Products"
+fama_9,Chemicals
+G,"Transport, storage and postal service"
+H,Accommodation and catering
+I,"Information transmission, software and information technology services"
+idvc,Volume
+J,Financial
+JPY=,JPYUSD
+K,Real estate
+L,Leasing and commercial service
+M,Scientific research and technical service
+m1,Reversal
+m12,Momentum
+mkt,Excess Market
 mycode,myname333
 mycode1,myname1
+N,"Water conservancy, environment and public facility management"
+O,"Resident service, repair and other services "
+P,Education
+Q,Health and social work
+R,"Culture, sports and entertainment"
+rf,Risk-free
+roe,Profitability
+S,Diversified
+size,Size
+US10YT=RR,TBill10Y
+exmkt,Excess Market
+mycode,myname

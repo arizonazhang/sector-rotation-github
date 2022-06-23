@@ -20,7 +20,6 @@ class api_connector():
     this class serves as an api connection to ek.
     It also helps to keep track of all the requests made and data points downloaded.
     """
-    ##TODO: can add other functions in here
     def __init__(self):
         self.requsts = 0
         self.datapoints = 0
@@ -114,7 +113,7 @@ def check_complete(data):
     print(f"In total the data has records on {len(data.index)} fridays")
     return 0
 
-def get_factor_single(country, code, save_csv=False):
+def get_factor_single(country, code):
     """
     get factor data (long-short) for a given country and unstack the data to upload to database
     """
@@ -135,9 +134,6 @@ def get_factor_single(country, code, save_csv=False):
     data['exmkt'] = data['market'] - data['rf']
     data = data.drop(columns=['market'])
 
-    if save_csv:
-        data.to_csv(r'.\input\factor\ten_factor_vw_{}_week_5.csv'.format(code))
-
     df = pd.DataFrame(data.stack()).reset_index()
     df.columns = ['date', 'code', 'value']
     df['markets'] = country + "_factor"
@@ -146,7 +142,7 @@ def get_factor_single(country, code, save_csv=False):
     return df
 
 
-def get_factor():
+def get_factor(save_file=False):
     """
     get factor data for all markets
     """
@@ -154,12 +150,14 @@ def get_factor():
     ls_factor = []
     for country, code in factor_indices.items():
         df = get_factor_single(country, code)
+        if save_file:
+            save_local(df, rf".\input\factor\ten_factor_vw_{code}_week_5.csv")
         ls_factor.append(df)
     factors = pd.concat(ls_factor)
     return factors
 
 
-def get_factor_single_ls(country, code, side, save_csv=False):
+def get_factor_single_ls(country, code, side):
     """
     get factor data (long and short separately) for a given country and unstack the data to upload to database
     """
@@ -171,8 +169,7 @@ def get_factor_single_ls(country, code, side, save_csv=False):
         data.index = pd.Series(list(map(lambda x: x + np.timedelta64(4 - x.weekday(), 'D'), data.index)))
         data = (data + 1).groupby(data.index).prod() - 1
 
-    if save_csv:
-        data.to_csv(r'.\input\factor\ten_factor_{}_week_{}_5.csv'.format(code, side))
+
 
     check_complete(data)
 
@@ -186,7 +183,7 @@ def get_factor_single_ls(country, code, side, save_csv=False):
     return df
 
 
-def get_factor_ls():
+def get_factor_ls(save_file=False):
     """
     get factor data (long and short separately) for all markets
     """
@@ -196,6 +193,8 @@ def get_factor_ls():
         for side in ['long', 'short']:
             df = get_factor_single_ls(country, code, side)
             ls_factor_sides.append(df)
+            if save_file:
+                save_local(df, rf'.\input\factor\ten_factor_{code}_week_{side}_5.csv')
     factors_sides = pd.concat(ls_factor_sides)
     return factors_sides
 
@@ -252,7 +251,7 @@ def get_sector_single(country, level, start_dt, end_dt, con):
     return df
 
 
-def get_sector(level, start_dt, end_dt, con):
+def get_sector(level, start_dt, end_dt, con, save_file=False):
     """
     get aggregate index return of a certain level
     :param level: "sector" or "industry_group"
@@ -262,6 +261,8 @@ def get_sector(level, start_dt, end_dt, con):
     ls_sector = []
     for country in sector_indices:
         df = get_sector_single(country, level, start_dt, end_dt, con)
+        if save_file:
+            save_local(df, rf".\input\sector\{sector_indices}_{level}_weekly.csv")
         ls_sector.append(df)
 
     sectors = pd.concat(ls_sector)
@@ -296,7 +297,7 @@ def get_exog(start_dt, end_dt, con):
 def save_local(data, file_name):
     """
     combine new data with data in local file
-    :param data: dataframe matching the structure in local file
+    :param data: dataframe with three columns, date, code and value
     :param file_name:
     :return:
     """
@@ -305,17 +306,15 @@ def save_local(data, file_name):
         old_data = pd.read_csv(file_name, index_col=0)
         old_data.index = pd.to_datetime(old_data.index, infer_datetime_format=True)
         data = pd.concat([old_data, data])
-        data = data.drop_duplicates().sort_index()
+        data = data.drop_duplicates().dropna().sort_index()
 
     try:
         print(data.tail(10))
         if input("Save file? ") == 'Y':
             data.to_csv(file_name)
-            print("File saved. ")
+            print(f"File ({file_name}) updated. ")
     except PermissionError:
         print("The destination file is open. Please close the file.")
-
-
 
 
 def new_code_name(df):
@@ -345,31 +344,32 @@ def new_code_name(df):
     df.to_sql("SecRotMapping", engine, if_exists="append", index=False, method=mysql_replace_into)
 
     # save to local file
-    allcodes = pd.read_csv(r'.\input\code_mapping.csv')
-    allcodes = pd.concat([allcodes, df]).drop_duplicates()
-    allcodes.to_csv(r'.\input\code_mapping.csv', index=False)
+    allsql = pd.read_sql("SELECT * FROM AlternativeData.SecRotMapping;", engine)
+    allcsv = pd.read_csv(r'.\input\code_mapping.csv')
+    all = pd.concat([allsql, allcsv]).drop_duplicates()
+    all.to_csv(r'.\input\code_mapping.csv', index=False)
 
 
 if __name__ == '__main__':
-    # the codes below are for testing purpose
-    # sectors = get_sector()
-    # factors = get_factor()
-    # factors_ls = get_factor_ls()
-    # exogs = get_exog()
-    #
-    # sectors = sectors[sectors.date <= pd.to_datetime('2022-03-20')]
-    # factors = factors[factors.date <= pd.to_datetime('2022-03-20')]
-    # factors_ls = factors_ls[factors_ls.date <= pd.to_datetime('2022-03-20')]
-    # exogs = exogs[exogs.date <= pd.to_datetime('2022-03-20')]
-    #
-    # data = pd.concat([sectors, factors, factors_ls, exogs])
+    start = '2022-06-01'
+    end = '2022-06-17'
+
+    # ----- update factor return (need to make sure input file is updated)
+    # factors = get_factor(save_file=False)
+    # factors_ls = get_factor_ls(save_file=True)
+    # data = pd.concat([factors, factors_ls])
     # upload_return(data)
 
+    # # ---- update sector return, exogenous variable (need to make sure refinitiv account if logged in)
     # con = api_connector()
-    # data = get_sector_single('us', 'industry_group', '2021-05-01', '2022-06-17', con)
+    # sectors = get_sector(level='sector', start_dt=start, end_dt=end, con=con)
+    # industry_groups = get_sector(level='industry_group', start_dt=start, end_dt=end, con=con)
+    # exogs = get_exog(start, end, con)
+    # data = pd.concat([sectors, industry_groups, exogs])
     # upload_return(data)
-    # print(data.head(5))
-    # print(data.tail(5))
     # con.print_counter()
-    data = pd.DataFrame({'code':['mycode', 'mycode1'], 'name':['myname333', 'myname1']})
+    #
+    # ----- update code_mapping table
+    data = pd.read_csv(r'.\input\code_mapping.csv')
+    # data = pd.DataFrame({'code':['exmkt', 'mycode1'], 'name':['Excess market', 'myname1']})
     new_code_name(data)
