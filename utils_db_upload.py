@@ -376,4 +376,4 @@ if __name__ == '__main__':
     # data = pd.read_csv(r'.\input\code_mapping.csv')
     # data = pd.DataFrame({'code':['exmkt', 'mycode1'], 'name':['Excess market', 'myname1']})
     # new_code_name(data)
-    factors = get_factor_single('cn', 'cn800')
+    factors = get_factor_single('us', 'us1500')

@@ -109,7 +109,6 @@ if __name__ == "__main__":
     warnings.simplefilter(action='ignore', category=FutureWarning)
 
     # define parameters
-    # sector_indices = ("hsci", "csi", "dj")
     # markets = ("hk", "cn", "us")
     # level = "sector"
     total_ret = False
@@ -151,10 +150,9 @@ if __name__ == "__main__":
                 suffix = "t"
             else: # default suffix
                 suffix = "e"
+            w_suffix = "3" if window < 260 else ""  # add suffix in file name to indicate 3y window
 
             try:
-                w_suffix = "3" if window < 260 else "" # add suffix in file name to indicate 3y window
-
                 pd.concat(ls_weight).to_csv(rf".\weights\{mkt}_{level}_{est_input.__name__ + suffix}{w_suffix}.csv")
                 pd.concat(ls_return).to_csv(rf".\performances\{mkt}_{level}_{est_input.__name__ + suffix}{w_suffix}.csv")
 
