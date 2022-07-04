@@ -114,7 +114,7 @@ if __name__ == "__main__":
     total_ret = False
 
     markets = ("hk", "us")
-    level = "industry_group"
+    level = "sector"
 
     window = 260
     func_list = [est_input_capm, est_input_factor, est_input_hist,
