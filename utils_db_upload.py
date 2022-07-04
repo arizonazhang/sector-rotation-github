@@ -34,8 +34,7 @@ class api_connector():
         """query data from api, add number of request and data points downloaded"""
         try:
             data = ek.get_timeseries(rics, fields='CLOSE', interval='weekly',
-                                     start_date=start_dt, end_date=end_dt,
-                                     debug=True)
+                                     start_date=start_dt, debug=True)
             data.index = pd.to_datetime(data.index)
 
             if len(rics) == 1:
