@@ -65,28 +65,31 @@ code,name
 .TR15GSPTRN,Transportation
 .TR15GSPTS,Telecommunication Services
 .TR15GSPU,Utilities
-.TRXFLDHDTA1,Academic & Educational Services
-.TRXFLDHDTE1,Energy - Fossil Fuels
-.TRXFLDHDTE2,Renewable Energy
-.TRXFLDHDTF1,Banking & Investment Services
-.TRXFLDHDTF4,Real Estate
-.TRXFLDHDTH1,Healthcare Services & Equipment
-.TRXFLDHDTH2,Pharmaceuticals & Medical Research
-.TRXFLDHDTI1,Industrial Goods
-.TRXFLDHDTI2,Industrial & Commercial Services
-.TRXFLDHDTI4,Transportation
-.TRXFLDHDTM1,Chemicals
-.TRXFLDHDTM2,Mineral Resources
-.TRXFLDHDTM3,Applied Resources
-.TRXFLDHDTN1,Food & Beverages
-.TRXFLDHDTN2,Personal & Household Products & Services
-.TRXFLDHDTT1,Technology Equipment
-.TRXFLDHDTT2,Software & IT Services
-.TRXFLDHDTU1,Utilities
-.TRXFLDHDTY1,Automobiles & Auto Parts
-.TRXFLDHDTY2,Cyclical Consumer Products
-.TRXFLDHDTY3,Cyclical Consumer Services
-.TRXFLDHDTY4,Retailers
+.TRXFLDHKTA1,Academic & Educational Services
+.TRXFLDHKTC1,Telecommunications Services
+.TRXFLDHKTE1,Energy - Fossil Fuels
+.TRXFLDHKTE2,Renewable Energy
+.TRXFLDHKTF1,Banking & Investment Services
+.TRXFLDHKTF3,Insurance
+.TRXFLDHKTF4,Real Estate
+.TRXFLDHKTH1,Healthcare Services
+.TRXFLDHKTH2,Pharmaceuticals & Medical Research
+.TRXFLDHKTI1,Industrial Goods
+.TRXFLDHKTI2,Industrial & Commercial Services
+.TRXFLDHKTI4,Transportation
+.TRXFLDHKTM1,Chemicals
+.TRXFLDHKTM2,Mineral Resources
+.TRXFLDHKTM3,Applied Resources
+.TRXFLDHKTN1,Food & Beverages
+.TRXFLDHKTN2,Personal & Household Products & Services
+.TRXFLDHKTN3,Food & Drug Retailing
+.TRXFLDHKTT1,Technology Equipment
+.TRXFLDHKTT2,Software & IT Services
+.TRXFLDHKTU1,Utilities
+.TRXFLDHKTY1,Automobiles & Auto Parts
+.TRXFLDHKTY2,Cyclical Consumer Products
+.TRXFLDHKTY3,Cyclical Consumer Services
+.TRXFLDHKTY4,Retailers
 A,"Agriculture, forestry, animal husbandry and fishery"
 ag,Investment
 B,Mining
@@ -131,6 +134,7 @@ fama_8,"Healthcare, Medical Equipment, Pharmaceutical Products"
 fama_9,Chemicals
 G,"Transport, storage and postal service"
 H,Accommodation and catering
+HIHKD1MD=,Hibor_1_month
 I,"Information transmission, software and information technology services"
 idvc,Volume
 J,Financial
@@ -153,5 +157,28 @@ roe,Profitability
 S,Diversified
 size,Size
 US10YT=RR,TBill10Y
+ .TRXFLDHKTC1,Telecommunications Services
+ .TRXFLDHKTE1,Energy - Fossil Fuels
+ .TRXFLDHKTE2,Renewable Energy
+ .TRXFLDHKTF1,Banking & Investment Services
+ .TRXFLDHKTF3,Insurance
+ .TRXFLDHKTF4,Real Estate
+ .TRXFLDHKTH1,Healthcare Services
+ .TRXFLDHKTH2,Pharmaceuticals & Medical Research
+ .TRXFLDHKTI1,Industrial Goods
+ .TRXFLDHKTI2,Industrial & Commercial Services
+ .TRXFLDHKTI4,Transportation
+ .TRXFLDHKTM1,Chemicals
+ .TRXFLDHKTM2,Mineral Resources
+ .TRXFLDHKTM3,Applied Resources
+ .TRXFLDHKTN1,Food & Beverages
+ .TRXFLDHKTN2,Personal & Household Products & Services
+ .TRXFLDHKTN3,Food & Drug Retailing
+ .TRXFLDHKTT1,Technology Equipment
+ .TRXFLDHKTT2,Software & IT Services
+ .TRXFLDHKTU1,Utilities
+ .TRXFLDHKTY1,Automobiles & Auto Parts
+ .TRXFLDHKTY2,Cyclical Consumer Products
+ .TRXFLDHKTY3,Cyclical Consumer Services
+ .TRXFLDHKTY4,Retailers
 exmkt,Excess Market
-mycode,myname
