@@ -131,7 +131,8 @@ ric_dict = {'us_sector': ['.TR15GSPE', '.TR15GSPM', '.TR15GSPI', '.TR15GSPD', '.
                                     '.TRXFLDHKTM1',  '.TRXFLDHKTM2', '.TRXFLDHKTM3', '.TRXFLDHKTN1',
                                     '.TRXFLDHKTN2', '.TRXFLDHKTN3', '.TRXFLDHKTT1', '.TRXFLDHKTT2',
                                      '.TRXFLDHKTU1', '.TRXFLDHKTY1',  '.TRXFLDHKTY2', '.TRXFLDHKTY3', '.TRXFLDHKTY4'],
-            'common_exogs': ['.dMIEF00000G', '.dMIEA00000G', 'US10YT=RR', '.DXY']} #TODO: complete the list
+            'common_exogs': ['.dMIEF00000G', '.dMIEA00000G', 'US10YT=RR', '.DXY', 'HIHKD1MD='],
+            'common_exogs_monthly': ['.dMIEF00000G', '.dMIEA00000G', 'US10YT=RR', '.DXY', 'HIHKD1MD=']} #TODO: complete the list
 
 
 def check_complete(data):
@@ -274,6 +275,7 @@ def save_local(data, file_name):
     """
     data = data.pivot(index='date', columns='code', values='value')
     data = data.astype(float).round(6)
+    data.index = pd.to_datetime(data.index)
 
     if os.path.exists(file_name):
         old_data = pd.read_csv(file_name, index_col=0)
@@ -312,58 +314,50 @@ def new_code_name(df):
     all.to_csv(r'.\input\code_mapping.csv', index=False)
 
 
-def weekly_update():
+def weekly_pct_chg(df):
+    return df.pct_change().dropna(how='all')
+
+
+def monthly_pct_chg(df):
+    return df.pct_change(4).dropna(how='all')
+
+
+def weekly_update(end_date):
     def weekly_pct_chg(df):
         return df.pct_change().dropna(how='all')
 
     def monthly_pct_chg(df):
         return df.pct_change(4).dropna(how='all')
 
-    end_date = '2022-06-24' ## TODO: change this column
-    update_list = ['cn_sector', 'us_sector', 'hk_sector', 'us_industry_group', 'hk_industry_group', 'exogs']
+    update_list = ['cn_sector', 'us_sector', 'hk_sector', 'us_industry_group', 'hk_industry_group', 'common_exogs', 'common_exogs_monthly']
     con = api_connector()
     for market in update_list:
         print(f" ----- Updating the list: {market}")
         ric = ric_dict[market]
 
         # monthly change data
-        if market == 'exogs':
+        if market == 'common_exogs_monthly':
             start_date = pd.to_datetime(end_date) - np.timedelta64(28, 'D') # start date is one month ago to get monthly change
             start_date = str(start_date)[:10]
             data = con.get_group_data(market, ric, proc_func=monthly_pct_chg, api_func=ek.get_timeseries,
-                               start_date=start_date, end_date=end_date)
+                               start_date=start_date, end_date=end_date, fields='CLOSE', interval='weekly')
             upload_data(data)
         # weekly change data
         else:
             start_date = pd.to_datetime(end_date) - np.timedelta64(7, 'D') # start date is one week ago to get monthly change
             start_date = str(start_date)[:10]
             data = con.get_group_data(market, ric, proc_func=weekly_pct_chg, api_func=ek.get_timeseries,
-                               start_date=start_date, end_date=end_date)
+                               start_date=start_date, end_date=end_date, fields='CLOSE', interval='weekly')
             upload_data(data)
+    con.print_counter()
 
 mdict = get_mapping()
 
 if __name__ == '__main__':
+    ## TODO: add scheduler
+    end_dt = '2022-07-01'
+    weekly_update(end_dt)
 
-    # ----- update factor return (need to make sure input file is updated)
-    # factors = get_factor(save_file=False)
-    # factors_ls = get_factor_ls(save_file=True)
-    # data = pd.concat([factors, factors_ls])
-    # upload_return(data)
-
-    # ----- update other variables that needed api connection
-    def weekly_pct_chg(df):
-        return df.pct_change().dropna(how='all')
-
-    def monthly_pct_chg(df):
-        return df.pct_change(4).dropna(how='all')
-
-    end_date = '2022-06-24'
-    con = api_connector()
-    update_list = ['cn_sector', 'us_sector', 'hk_sector', 'us_industry_group', 'hk_industry_group', 'exogs']
-    market = market
-    data = con.get_group_data(market, ric, proc_func=weekly_pct_chg, api_func=ek.get_timeseries,
-                       start_date=start_date, end_date=end_date)
 
 
 
