@@ -150,56 +150,38 @@ def check_complete(data):
     return 0
 
 
-def get_factor_single(country, code):
+def get_factor_single(country, code, side=None):
     """
     get factor data (long-short) for a given country and unstack the data to upload to database
     """
-    data = pd.read_csv(r'.\input\ten_factor_vw_{}_week_5.csv'.format(code), index_col=0)
+    if not side:
+        data = pd.read_csv(r'.\input\ten_factor_vw_{}_week_5.csv'.format(code), index_col=0)
+        # adjust column names
+        data.columns = ["rf" if item == "rf_week" else item for item in data.columns]
+        data['exmkt'] = data['market'] - data['rf']
+        data = data.drop(columns=['market'])
+    else:
+        data = pd.read_csv(r'.\input\ten_factor_{}_week_{}_5.csv'.format(code, side), index_col=0)
     data.index = pd.to_datetime(data.index)
-
-    # adjust column names
-    data.columns = ["rf" if item == "rf_week" else item for item in data.columns]
 
     # convert dates to Fridays and merge same Fridays together
     if (data.index.weekday != 4).any():
         data.index = pd.Series(list(map(lambda x: x + np.timedelta64(4 - x.weekday(), 'D'), data.index)))
         data = (data + 1).groupby(data.index).prod() - 1
 
+    # check if data is complete
     check_complete(data)
 
     # stack data and add other columns
-    data['exmkt'] = data['market'] - data['rf']
-    data = data.drop(columns=['market'])
-
+    data.index = data.index.strftime("%Y-%m-%d")
     df = pd.DataFrame(data.stack()).reset_index()
     df.columns = ['date', 'code', 'value']
     df['markets'] = country + "_factor"
     df['name'] = df.code.apply(lambda x: mdict[x])
-    df['side'] = "LS"
-    return df
-
-
-def get_factor_single_ls(country, code, side):
-    """
-    get factor data (long and short separately) for a given country and unstack the data to upload to database
-    """
-    data = pd.read_csv(r'.\input\ten_factor_{}_week_{}_5.csv'.format(code, side), index_col=0)
-    data.index = pd.to_datetime(data.index)
-
-    # convert dates to Fridays and merge same Fridays together
-    if (data.index.weekday != 4).any():
-        data.index = pd.Series(list(map(lambda x: x + np.timedelta64(4 - x.weekday(), 'D'), data.index)))
-        data = (data + 1).groupby(data.index).prod() - 1
-
-    check_complete(data)
-
-    # stack data and add other columns
-    df = pd.DataFrame(data.stack(), columns=['ret']).reset_index()
-    df.columns = ['date', 'code', 'value']
-    df['markets'] = country + "_factor"
-    df['name'] = df.code.apply(lambda x: mdict[x])
-    df['side'] = side[0].upper()
-    print("Length: {}, code: {}, side: {}".format(len(data.index), code, side))
+    if not side:
+        df['side'] = "LS"
+    else:
+        df['side'] = side[0].upper() # "L" or "S"
     return df
 
 
@@ -210,28 +192,17 @@ def get_factor(save_file=False):
     factor_indices = {'cn': 'cn800', 'hk': 'hk400', 'us': 'us1500'}
     ls_factor = []
     for country, code in factor_indices.items():
-        df = get_factor_single(country, code)
-        if save_file:
-            save_local(df, rf".\input\factor\ten_factor_vw_{code}_week_5.csv")
-        ls_factor.append(df)
+        for side in [None, 'long', 'short']:
+            df = get_factor_single(country, code, side)
+            upload_mysql(df)
+            if save_file:
+                if not side:
+                    save_local(df, rf".\input\factor\ten_factor_vw_{code}_week_5.csv")
+                else:
+                    save_local(df, rf'.\input\factor\ten_factor_{code}_week_{side}_5.csv')
+            ls_factor.append(df)
     factors = pd.concat(ls_factor)
     return factors
-
-
-def get_factor_ls(save_file=False):
-    """
-    get factor data (long and short separately) for all markets
-    """
-    factor_indices = {'cn': 'cn800', 'hk': 'hk400', 'us': 'us1500'}
-    ls_factor_sides = []
-    for country, code in factor_indices.items():
-        for side in ['long', 'short']:
-            df = get_factor_single_ls(country, code, side)
-            ls_factor_sides.append(df)
-            if save_file:
-                save_local(df, rf'.\input\factor\ten_factor_{code}_week_{side}_5.csv')
-    factors_sides = pd.concat(ls_factor_sides)
-    return factors_sides
 
 
 def replace_into_mysql(query, table_name, upload_data):
@@ -258,7 +229,7 @@ def replace_into_mysql(query, table_name, upload_data):
     print(f"Uploaded {len(upload_data.index)-cnt}/{len(upload_data.index)} records into table [{table_name}].")
 
 
-def upload_data(data):
+def upload_mysql(data):
     query = """
     replace into SectorRotationRet (date, markets, code, name, side, value) values
      (%(date)s, %(markets)s, %(code)s, %(name)s, %(side)s, %(value)s)
@@ -341,14 +312,14 @@ def weekly_update(end_date):
             start_date = str(start_date)[:10]
             data = con.get_group_data(market, ric, proc_func=monthly_pct_chg, api_func=ek.get_timeseries,
                                start_date=start_date, end_date=end_date, fields='CLOSE', interval='weekly')
-            upload_data(data)
+            upload_mysql(data)
         # weekly change data
         else:
             start_date = pd.to_datetime(end_date) - np.timedelta64(7, 'D') # start date is one week ago to get monthly change
             start_date = str(start_date)[:10]
             data = con.get_group_data(market, ric, proc_func=weekly_pct_chg, api_func=ek.get_timeseries,
                                start_date=start_date, end_date=end_date, fields='CLOSE', interval='weekly')
-            upload_data(data)
+            upload_mysql(data)
     con.print_counter()
 
 mdict = get_mapping()
@@ -356,7 +327,12 @@ mdict = get_mapping()
 if __name__ == '__main__':
     ## TODO: add scheduler
     end_dt = '2022-07-01'
-    weekly_update(end_dt)
+
+    # ----- update factor return (need to make sure input file is updated)
+    get_factor(save_file=False)
+
+    # ----- update other variables
+    # weekly_update(end_dt)
 
 
 
